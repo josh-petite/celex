@@ -5,20 +5,32 @@ namespace Assets.Scripts.Entities
 {
     public interface ITarget
     {
-        string Name { get; set; }
+        GameObject DisplayPrefab { get; set; }
+        GameObject ExplosionPrefab { get; set; }
+        Loot Loot { get; set; }
+
+        string DisplayName { get; set; }
         float Durability { get; set; }
+
         event Target.TargetClicked OnTargetClicked;
         event Target.TargetDied OnTargetDeath;
+
         float GetDurabilityPercentage();
         Transform GetTransform();
+        Vector3 GetPosition();
         void DecreaseDurability(float amount);
+        GameObject GetGameObject();
     }
 
     public abstract class Target : MonoBehaviour, ITarget
     {
         public delegate void TargetClicked(ITarget e);
 
-        public abstract string Name { get; set; }
+        public GameObject DisplayPrefab { get; set; }
+        public GameObject ExplosionPrefab { get; set; }
+
+        public Loot Loot { get; set; }
+        public string DisplayName { get; set; }
         public abstract float Durability { get; set; }
 
         event TargetClicked ITarget.OnTargetClicked
@@ -35,7 +47,17 @@ namespace Assets.Scripts.Entities
 
         public abstract float GetDurabilityPercentage();
         public abstract Transform GetTransform();
+        public Vector3 GetPosition()
+        {
+            return transform.position;
+        }
+
         public abstract void DecreaseDurability(float amount);
+        public GameObject GetGameObject()
+        {
+            return gameObject;
+        }
+
         public static event TargetClicked OnTargetClicked;
 
         public delegate void TargetDied(ITarget e);

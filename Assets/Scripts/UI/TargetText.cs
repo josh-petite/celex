@@ -14,7 +14,7 @@ public class TargetText : MonoBehaviour
             return;
         }
 
-        Text.text = target.Name;
+        Text.text = target.DisplayName;
     }
     
     // Use this for initialization

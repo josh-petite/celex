@@ -5,9 +5,8 @@ public class Asteroid : Target
 {
     private float _durability;
     private float _maxDurability;
-
-    public GameObject ExplosionPrefab;
-
+    private GameObject _display;
+    
     public override float Durability
     {
         get { return _durability; }
@@ -27,21 +26,14 @@ public class Asteroid : Target
     {
         return transform;
     }
-
-    public override string Name { get; set; }
+    
     public string ResourcePath { get; set; }
+    
 
     // Use this for initialization
     void Start()
     {
-        var texture = Resources.Load<Texture2D>(ResourcePath);
-        var spriteLocation = new Rect(0, 0, texture.width, texture.height);
-        var rawSprite = Sprite.Create(texture, spriteLocation, new Vector2(0.5f, 0.5f));
-
-        var spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-        spriteRenderer.sprite = rawSprite;
-        spriteRenderer.transform.SetParent(transform, false);
-
+        PlayDisplay();
         gameObject.AddComponent<BoxCollider2D>();
     }
 
@@ -51,8 +43,15 @@ public class Asteroid : Target
         if (Durability >= 0.0f) return;
         
         BroadcastOnTargetDeath(this);
+        Destroy(_display);
         PlayExplosion();
         Destroy(gameObject);
+    }
+
+    void PlayDisplay()
+    {
+        _display = Instantiate(DisplayPrefab);
+        _display.transform.position = transform.position;
     }
 
     void PlayExplosion()

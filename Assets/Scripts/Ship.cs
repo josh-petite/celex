@@ -10,6 +10,8 @@ public class Ship : MonoBehaviour
     public delegate void TargetSetAction(ITarget e);
     public static event TargetSetAction OnTargetSet;
 
+    public float RotationSpeed = 1.0f;
+
     // Use this for initialization
     void Start()
     {
@@ -23,6 +25,7 @@ public class Ship : MonoBehaviour
         if (target == null) return;
 
         _target = target;
+        Debug.Log("Target changed to: " + _target.GetGameObject().name);
         BroadcastTargetSetEvent();
 
         _miningLasers.ToList().ForEach(ml =>
@@ -35,7 +38,18 @@ public class Ship : MonoBehaviour
     void Update()
     {
         if (_target == null) return;
-        _target.DecreaseDurability(_miningLasers.Sum(ml => ml.Dps));
+
+        var targetPosition = _target.GetPosition();
+        transform.rotation = Quaternion.Lerp(transform.rotation, 
+            Quaternion.LookRotation(Vector3.forward, targetPosition - transform.position),
+            Time.fixedDeltaTime * RotationSpeed);
+
+        RaycastHit2D hit = Physics2D.Raycast(targetPosition, -Vector2.up);
+        if (hit.collider != null)
+        {
+            Debug.DrawRay(targetPosition, transform.rotation * transform.forward * 4, Color.red);
+            _target.DecreaseDurability(_miningLasers.Sum(ml => ml.Dps));
+        }
     }
     
     private void ClearTarget(ITarget target)

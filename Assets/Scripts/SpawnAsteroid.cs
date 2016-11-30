@@ -34,9 +34,10 @@ public class SpawnAsteroid : MonoBehaviour
 
         var scaleFactor = 1 + (durability - 500)/300f;
         asteroid.transform.localScale += new Vector3(scaleFactor, scaleFactor, 1);
-        asteroid.Name = asteroidName;
+        asteroid.DisplayName = asteroidName;
         asteroid.Durability = durability;
         asteroid.ResourcePath = resourcePath;
+        asteroid.DisplayPrefab = (GameObject)Resources.Load("Prefabs/VoxisPrefab", typeof(GameObject));
         asteroid.ExplosionPrefab = (GameObject) Resources.Load("Prefabs/ExplosionPrefab", typeof (GameObject));
     }
 }

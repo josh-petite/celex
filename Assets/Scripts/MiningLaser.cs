@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class MiningLaser : MonoBehaviour
 {
@@ -15,8 +14,8 @@ public class MiningLaser : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
         _lineRenderer.SetVertexCount(2);
         _lineRenderer.SetWidth(0.05f, 0.05f);
-        _lineRenderer.GetComponent<Renderer>().material = LineMaterial;
-        _lineRenderer.SetColors(Color.black, Color.red);
+        _lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+        _lineRenderer.SetColors(Color.green, Color.red);
 
         Dps = Random.value;
     }
